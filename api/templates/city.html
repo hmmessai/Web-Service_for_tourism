@@ -1,0 +1,130 @@
+{% extends './main.html' %}
+{% block title %}
+  Tourism Web Service: {{city.name}}
+{% endblock %}
+{% block content %}
+<div class="container-fluid" style="padding-bottom: 20px; min-height: 70vh;">
+    <h1 class="text-center" style="border-bottom: 1px blueviolet solid; padding-bottom: 20px;">{{ city.name }}</h1>
+    
+    <div class="col-md-4" >
+        <div class="col-md-12 col-sm-7 media" style="padding-bottom: 20px;">
+            <div class="media-left">
+                <img class="media-object" src="{{ url_for('main.uploaded_file', filename=city.id +'.jpg') }}" alt="Uploaded Image" style="max-width: 100%; max-height: 100%;">
+            </div>
+        </div>
+            <div class="col-md-12" style="max-height: 400px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; padding-top: 30px;">
+                <ul class="list-group">
+                  <li class="list-group-item active" style="position: sticky; top: 0;">
+                    <div class="row" style="justify-content: center;">
+                      <h3 class="col-md-6 col-sm-6" style="float: left;">
+                        Registered Places
+                      </h3>
+                      <span class="col-md-3 col-sm-3"></span>
+                      <a class="col-md-3 col-sm-3 btn btn-default btn-warning" href="{{ url_for('main.contribute') }}?city={{city.name}}#add-place" style="float: top-right; align-self: center;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Place</a>
+                    </div>
+                  </li>
+                  <div id="myDIV">
+                    {% if places == [] %}
+                        <li class="list-group-item text-center">No places registered yet</li>
+                    {% else %}
+                        {% for place in places %}
+                        <a href="/place/{{place.name}}" class="list-group-item">{{ place.name }}</a>
+                        {% endfor %}
+                    {% endif %}
+                  </div>
+                </ul>
+            </div>
+    </div>
+    
+    <div class="col-md-1">
+        <span></span>
+    </div>
+    <div class="col-md-7" style="padding-top: 20px; padding-bottom: 20px;">
+        <div class="row" id="form-section" style="display: none; padding-top: 20px; padding-bottom: 20px;">
+            <form action="/update-city" method="post" enctype="multipart/form-data">
+                <div class="col-md-12 form-group">
+                    <label for="name">Name: </label>
+                    <input type="text"  class="form-control" name="name" value="{{city.name}}" placeholder="Name of city"/>
+                  </div>
+                  <div class="col-md-12 form-group">
+                    <label for="population">Population: </label>
+                    <input type="number" class="form-control" name="population" value="{{city.population}}" step="5000"/>
+                  </div>
+                    <div class="col-md-12 form-group">
+                      <label for="region">Region: </label>
+                      <select name="region" class="form-control" id="region">
+                        <option value="Addis Ababa" {% if city.region == 'Addis Ababa' %} selected {% endif %}>Addis Ababa</option>
+                        <option value="Oromia" {% if city.region == 'Oromia' %} selected {% endif %}>Oromia</option>
+                        <option value="Somali" {% if city.region == 'Somali' %} selected {% endif %}>Somali</option>
+                        <option value="Afar" {% if city.region == 'Afar' %} selected {% endif %}>Afar</option>
+                        <option value="Amhara" {% if city.region == 'Amhara' %} selected {% endif %}>Amhara</option>
+                        <option value="SNNPR" {% if city.region == 'SNNPR' %} selected {% endif %}>Southern Nations, Nationalities and Peoples of Ethiopia</option>
+                        <option value="Benishangul Gumz" {% if city.region == 'Benishangul Gumz' %} selected {% endif %}>Benishangul Gumz</option>
+                        <option value="Tigray" {% if city.region == 'Tigray' %} selected {% endif %}>Tigray</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12 form-group">
+                      <label for="button">Weather: </label>
+                      <select name="weather" class="form-control" id="region">
+                        <option value="Kola" {% if city.weather == 'Kola' %} selected {% endif %}>Kola</option>
+                        <option value="Dega" {% if city.weather == 'Dega' %} selected {% endif %}>Dega</option>
+                        <option value="Weyna Dega" {% if city.weather == 'Weyna Dega' %} selected {% endif %}>Weyna Dega</option>
+                        <option value="Wurch" {% if city.weather == 'Wurch' %} selected {% endif %}>Wurch</option>
+                        <option value="Bereha" {% if city.weather == 'Bereha' %} selected {% endif %}>Bereha</option>
+                      </select>
+                    </div>
+                  <div class="col-md-12 form-group">
+                    <label for="features">Features: </label>
+                    <input type="text" class="form-control" name="features" placeholder="Known for its ...."/>
+                  </div>
+                  <div class="col-md-12 form-group">
+                    <label for="images">Add Images: </label>
+                      <input type="file" class="form-control" name="image">
+                  </div>
+                  <div class="col-md-12 col-sm-4 text-center">
+                    <button class="btn-default btn-primary" type="submit" style="font-size: 1.8rem; width: 50%; height: 3rem; border: none; border-radius: 5px;">Confirm Change</button>
+                </div>
+            </form>
+        </div>
+        <div class="row" id="display-section">
+            <div class="col-md-6 col-sm-6">
+                <p><strong>Population:</strong> {{city.population}}</p>
+                <p><strong>Region:</strong> {{city.region}}</p>
+                <p><strong>Weather:</strong> {{city.weather}}</p>
+                <p><strong>Registered On:</strong> {{ city.created_at | datetime_to_date }}</p>
+                <p><strong>Last Updated On:</strong> {{ city.updated_at | datetime_to_date }}</p>
+             </div>
+             <div class="col-md-2 col-sm-2"><span></span></div>
+             <div class="col-md-4 col-sm-4" id="update-btn">
+                 <button class="btn-default btn-primary" onclick="update_city()" style="font-size: 1.8rem; width: 100%; height: 3rem; border: none; border-radius: 5px;">Update</button>
+             </div>
+        </div>
+        <div class="row" style="border-top: 1px solid black; padding-top: 15px;">
+            <div class="col-md-5 col-sm-5" style="float: left; width: calc(100% - 50%); overflow-wrap: break-word;">{{city}}
+                {{city}}{{city}}{{city}}{{city}}{{city}}{{city}}{{city}}
+            </div>
+            <div class="col-md-7 col-sm-7" style="float: right; width: 50%;">
+                <iframe style="width:100%; height:490px" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" id="gmap_canvas" onclick="saveLocation()" src="https://maps.google.com/maps?width=816&amp;height=497&amp;hl=en&amp;q={{city.name}}, Ethiopia&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+            </div>
+        </div>
+        <div class="row" style="border-top: 1px solid black; padding-top: 15px;">
+            <div class="col-md-12">{{city}}</div>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+    function update_city () {
+        let form_section = document.getElementById('form-section');
+        let display_section = document.getElementById('display-section');
+        let update_btn = document.getElementById('update-btn');
+
+        if (form_section.style.display === "none") {
+            form_section.style.display = 'block';
+            display_section.style.display = 'none';
+        }
+    }
+</script>
+
+{% endblock %}

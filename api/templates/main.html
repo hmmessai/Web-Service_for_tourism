@@ -1,0 +1,192 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}
+  Tourism Web Service
+{% endblock %}
+{% block head %}
+  {{super()}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block body %}
+{% block navbar %}
+<nav class="navbar navbar-default" style="position: relative; top: 0px; width: 100%; z-index: 1000;">
+    <div class="container-fluid">
+
+      <div class="navbar-header">
+            <a class="navbar-brand text-uppercase" href="/">
+                Tourism Web Service
+              </a>
+      </div>
+      <ul class="navbar-right">
+        {% if request.path == '/contribute' %}
+          <a class="btn btn-primary" href="{{ url_for('main.index') }}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a>
+        {% else%}
+          <a class="btn btn-primary" href="{{ url_for('main.contribute') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Contribute</a>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid" style="padding-top: 65px;">
+    <div class="row" style="margin-bottom: 20px;">
+      <div class="col-md-4"></div>
+      <div class="col-md-4 form-group">
+        <input type="text" class="form-control" id="myInput">
+      </div>
+      <div class="col-md-4 form-group text-left d-flex align-self-start justify-content-start">
+        <button class="btn btn-default btn-primary" style="padding: 5px 30px 5px;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>   Search</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2" style="max-height: 400px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
+          <ul class="list-group">
+            <li class="list-group-item active" style="position: sticky; top: 0;">
+              <h3>
+                Available Cities
+              </h3>
+            </li>
+            <div id="myDIV">
+              {% for city in cities %}
+                <a href="/city/{{city.name}}" class="list-group-item">{{ city.name }}</a>
+              {% endfor %}
+            </div>
+          </ul>
+      </div>
+      <span class="col-md-1"></span>
+      <div class="col-md-8">
+        <h3 class="text-center" style="border-bottom: 1px solid grey; padding-bottom: 10px; margin-bottom: 20px;">Filter Cities</h3>
+        <div class="row">
+          <div class="col-md-4 form-group">
+            <label for="region">Region: </label>
+            <select name="region" class="form-control" id="region">
+              <option value="all">All</option>
+              <option value="Addis Ababa">Addis Ababa</option>
+              <option value="Oromia">Oromia</option>
+              <option value="Somali">Somali</option>
+              <option value="Afar">Afar</option>
+              <option value="Amhara">Amhara</option>
+              <option value="SNNPR">Southern Nations, Nationalities and Peoples of Ethiopia</option>
+              <option value="Benishangul Gumz">Benishangul Gumz</option>
+              <option value="Tigray">Tigray</option>
+            </select>
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="population-max">Population Range: </label>
+            <div class="row">
+              <div class="col-md-6">
+                <label for="population-max">From: </label>
+                <input type="number" name="population-min" class="form-control" id="population-min" placeholder=value value="100000" step="5000">
+              </div>
+              <div class="col-md-6">
+                <label for="population-max">To: </label>
+                <input type="number" name="population-max" class="form-control" id="population-max" placeholder=value value="10000000" step="5000">
+              </div>
+            </div>
+            <div id="warn-population"></div>
+          </div>
+          <div class="col-md-4 form-group">
+            <label for="region">Weather: </label>
+            <select name="weather" class="form-control" id="weather">
+              <option value="all">All</option>
+              <option value="Kola" class="for">Kola</option>
+              <option value="Dega">Dega</option>
+              <option value="Weyna Dega">Weyna Dega</option>
+              <option value="Wurch">Wurch</option>
+              <option value="Bereha">Bereha</option>
+            </select>
+          </div>
+          <div class="col-md-12 text-center">
+            <button class="btn btn-default btn-primary text-center" id="filter-btn" style="margin-top: 30px;"><span class="glyphicon glyphicon-filter col-md-2" aria-hidden="true"></span>Filter</button>
+          </div>
+        </div>
+        <div class="container col-md-12 text-center" style="border: 1px solid grey; padding: 0; margin: 10px auto 70px; height: 300px; max-height: 300px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;" id="filteredResults">
+          <div class="list-group">
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
+
+    
+{% endblock %}
+
+<div class="jumbotron" style="bottom: 2px;">
+  <div class="container">
+    <div class="col-md-4 col-sm-4">
+      <ul style="list-style: none;">
+        <li>
+          <a>Hello, World</a>
+        </li>
+        <li>
+          <a>Hello, World</a>
+        </li>
+        <li>
+          <a>Hello, World</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <ul style="list-style: none;">
+        <li>
+          <a>Hello, World</a>
+        </li>
+        <li>
+          <a>Hello, World</a>
+        </li>
+        <li>
+          <a>Hello, World</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <ul style="list-style: none;">
+        <li>
+          <a>Hello, World</a>
+        </li>
+        <li>
+          <a>Hello, World</a>
+        </li>
+        <li>
+          <a>Hello, World</a>
+        </li>
+      </ul>
+    </div>
+    <span class="col-md-12 col-sm-12"> </span>
+    <span class="col-md-12 col-sm-12"></span>
+    <span class="col-md-12 col-sm-12"> </span>
+  </div>
+  
+</div>
+
+<div class="container-fluid" style="width: 100%; position: fixed; bottom: 0px; padding: 0">
+  <footer class="well text-center" style="margin: 0;">
+    <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>  2024 Tourism Web Service
+  </footer>
+</div>
+
+<script>
+  $(document).ready(function() {
+      // Attach click event to the button
+      $('#filter-btn').click(function() {
+        $('#filteredResults').html("");
+        var cities = {{ cities | tojson }}
+
+        cities.forEach(city => {
+          var min = parseInt($('#population-min').val());
+          var max = parseInt($('#population-max').val());
+          var region = $('#region').val();
+          var weather = $('#weather').val();
+          if ((region === 'all' || region === city.region) && (weather === 'all' || weather === city.weather) && (min <= parseInt(city.population)) && (max >= parseInt(city.population))) {
+              $('#filteredResults').append(`<a href="/city/${city.name }" class="list-group-item">${city.name}</a>`)
+          }
+        });
+      });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends './main.html' %}
+{% block title %}
+  Tourism Web Service: Contribute
+{% endblock %}
+{% block content %}
+    <div class="container-fluid" style="padding-bottom: 70px;">
+        <div class="container-fluid">
+            <div class="col-md-12">
+                <div class="jumbotron"  style="height: 400px;">
+                    <h1>City Registration</h1>
+                    <p>Your support means a lot to us</p>
+                    <p>Enter the city you live in or the city you know of that can benefit others by knowing.</p>
+                    <p style="border-bottom: 1px solid blue; padding-bottom: 15px;">Introduce your city to the world.</p>
+                    <p><a class="btn btn-primary btn-lg" href="#add-city" role="button">Introduce your city to the world</a></p>
+                  </div>
+            </div>
+            <div class="col-md-12">
+                <div class="jumbotron" style="height: 400px;">
+                    <h1>Site Registration</h1>
+                    <p>Your favourite places are our favourite places</p>
+                    <p>Let us know about your favourite places to visit.</p>
+                    <p style="border-bottom: 1px solid blue; padding-bottom: 15px;">Your support means a lot to us</p>
+                    <p><a class="btn btn-primary btn-lg" href="#add-place" role="button">Let us know about your favourite places</a></p>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4" id="add-city"  style="border: 1px solid black; margin: auto; margin-top: 125px; padding: 20px;">
+                    <h2>Details about the city Registration</h2>
+                </div>
+                <span class="col-md-2"></span>
+                <div class="col-md-6"style="border: 1px solid black; margin: auto; margin-top: 125px; padding: 10px;">
+                    <h2 class="text-center text-uppercase" style="border-bottom: 1px solid brown; padding-bottom: 2rem;">city Registration</h2>
+                    <form action="/add-city" method="post" enctype="multipart/form-data">
+                      <div class="col-md-12 form-group">
+                        <label for="name">Name: </label>
+                        <input type="text"  class="form-control" name="name" placeholder="Name of city"/>
+                      </div>
+                      <div class="col-md-12 form-group">
+                        <label for="population">Population: </label>
+                        <input type="number" class="form-control" name="population" value="100000" step="5000"/>
+                      </div>
+                        <div class="col-md-12 form-group">
+                          <label for="region">Region: </label>
+                          <select name="region" class="form-control" id="region">
+                            <option value="Addis Ababa" class="for">Addis Ababa</option>
+                            <option value="Oromia">Oromia</option>
+                            <option value="Somali">Somali</option>
+                            <option value="Afar">Afar</option>
+                            <option value="Amhara">Amhara</option>
+                            <option value="SNNPR">Southern Nations, Nationalities and Peoples of Ethiopia</option>
+                            <option value="Benishangul Gumz">Benishangul Gumz</option>
+                            <option value="Tigray">Tigray</option>
+                          </select>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <label for="button">Weather: </label>
+                          <select name="weather" class="form-control" id="region">
+                            <option value="Kola" class="for">Kola</option>
+                            <option value="Dega">Dega</option>
+                            <option value="Weyna Dega">Weyna Dega</option>
+                            <option value="Wurch">Wurch</option>
+                            <option value="Bereha">Bereha</option>
+                          </select>
+                        </div>
+                      <div class="col-md-12 form-group">
+                        <label for="features">Features: </label>
+                        <input type="text" class="form-control" name="features" placeholder="Known for its ...."/>
+                      </div>
+                      <div class="col-md-12 form-group">
+                        <label for="features">Add Images: </label>
+                          <input type="file" class="form-control" name="image" multiple>
+                      </div>
+                        <div class="col-md-12 text-center">
+                          <button class="btn btn-default btn-primary text-center"><span class="glyphicon glyphicon-plus col-md-2" aria-hidden="true"></span>Add City</button>
+                        </div>
+                      </form>
+                      
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4" id="add-place"  style="border: 1px solid black; margin: auto; margin-top: 125px; padding: 20px;">
+                    <h2>Details about the place Registration</h2>
+                </div>
+                <span class="col-md-2"></span>
+                <div class="col-md-6"style="border: 1px solid black; margin: auto; margin-top: 125px; padding: 20px;">
+                    <h2 class="text-center text-uppercase" style="border-bottom: 1px solid brown; padding-bottom: 2rem;">place Registration</h2>
+                    <form action="/add-place" method="post">
+                      <div class="col-md-12 form-group">
+                        <label for="name">Name: </label>
+                        <input type="text"  class="form-control" name="name" placeholder="Name of place" required/>
+                      </div>
+                        <div class="col-md-12 form-group">
+                          <label for="region">City: </label>
+                          <select name="city" class="form-control" id="city" onchange="changeMap()" style="max-height: 50px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
+                            {% for city in cities %}
+                              <option value="{{ city.name }}">{{ city.name }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <label for="type">Type of Place: </label>
+                          <select name="type" class="form-control" id="type">
+                            <option value="Entertainment" class="for">Entertainment</option>
+                            <option value="Educational">Educational</option>
+                            <option value="Hotel and Restaurant">Hotel and Restaurant</option>
+                            <option value="Historical">Historical</option>
+                            <option value="Natural">Natural</option>
+                            <option value="Art">Art</option>
+                          </select>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <label for="price">Price Range: </label>
+                          <select name="price" class="form-control" id="region">
+                            <option value="Cheap" class="for">Cheap</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Expensive">Expensive</option>
+                            <option value="Free">Free</option>
+                          </select>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <iframe width="816" height="497" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" id="gmap_canvas" onclick="saveLocation()" src="https://maps.google.com/maps?width=816&amp;height=497&amp;hl=en&amp;q=Adama, Ethiopia&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <label for="address">Address: </label>
+                          <small>Depending on the map above</small>
+                          <input type="text" class="form-control" name="address" placeholder="Address" id="address"/>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <label for="details">Details: </label>
+                          <textarea id="myTextArea" rows="4" cols="50" class="form-control" name="details" placeholder="Description of the place"></textarea>
+                        </div>
+                        <div class="col-md-12 text-center">
+                          <button class="btn btn-default btn-primary text-center"><span class="glyphicon glyphicon-plus col-md-2" aria-hidden="true"></span>Add Place</button>
+                        </div>
+                      </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <script>
+      function changeMap () {
+        var location = document.getElementById("city").value + ', Ethiopia';
+        var query = "q=" + encodeURIComponent(location);
+      
+        var url = "https://maps.google.com/maps?" +
+                  "width=816" +
+                  "&height=497" +
+                  "&hl=en" +
+                  "&" + query +
+                  "&t=" +
+                  "&z=12" +
+                  "&ie=UTF8" +
+                  "&iwloc=B" +
+                  "&output=embed";
+      
+        // Set the src attribute of the iframe
+        document.getElementById("gmap_canvas").src = url;
+      }
+      function saveLocation() {
+        var location = document.getElementById('gmap_canvas').src;
+        document.getElementById('address').value = location;
+      }
+
+      document.getElementById('gmap_canvas').addEventListener('click', saveLocation)
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const cityName = urlParams.get('city') || 'Adama';
+
+      
+      document.getElementById('city').value = cityName;
+      changeMap();
+    </script>
+{% endblock %}
