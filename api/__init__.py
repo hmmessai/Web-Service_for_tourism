@@ -10,8 +10,17 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'api.sqlite'),
-        UPLOAD_FOLDER=os.path.join(app.instance_path, 'uploads/')
+        UPLOAD_FOLDER=os.path.join(app.instance_path, 'uploads/'),
+        STORAGE_FOLDER=os.path.join(app.instance_path, 'storage/')
     )
+
+    upload_folder = app.config['UPLOAD_FOLDER']
+    if not os.path.exists(upload_folder):
+        os.makedirs(upload_folder)
+
+    storage_folder = app.config['STORAGE_FOLDER']
+    if not os.path.exists(storage_folder):
+        os.makedirs(storage_folder)
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)

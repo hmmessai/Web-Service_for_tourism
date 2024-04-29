@@ -66,5 +66,8 @@ class FileStorage:
                 for k, v in obj.items():
                     restored_obj = eval(v['__class__'])(**v)
                     self.new(restored_obj)
+        except FileNotFoundError:  # Handle the case where the file doesn't exist
+            with open(self.__file, 'w') as f:  # Create an empty file
+                pass
         except Exception as e:
             print(e)

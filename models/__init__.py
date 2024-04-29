@@ -2,5 +2,5 @@
 from models.engine.filestorage import FileStorage
 
 
-storage = FileStorage('storage/file.json')
+storage = FileStorage('instance/storage/file.json')
 storage.reload()
