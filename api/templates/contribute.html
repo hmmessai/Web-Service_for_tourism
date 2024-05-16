@@ -50,6 +50,7 @@
                             <option value="SNNPR">Southern Nations, Nationalities and Peoples of Ethiopia</option>
                             <option value="Benishangul Gumz">Benishangul Gumz</option>
                             <option value="Tigray">Tigray</option>
+                            <option value="Harari">Harari</option>
                           </select>
                         </div>
                         <div class="col-md-12 form-group">
@@ -91,9 +92,9 @@
                       </div>
                         <div class="col-md-12 form-group">
                           <label for="region">City: </label>
-                          <select name="city" class="form-control" id="city" onchange="changeMap()" style="max-height: 50px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
+                          <select name="cities_id" class="form-control" id="city" onchange="changeMap()" style="max-height: 50px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
                             {% for city in cities %}
-                              <option value="{{ city.name }}">{{ city.name }}</option>
+                              <option value="{{ city.id }}">{{ city.name }}</option>
                             {% endfor %}
                           </select>
                         </div>
@@ -140,7 +141,7 @@
     </div>
     <script>
       function changeMap () {
-        var location = document.getElementById("city").value + ', Ethiopia';
+        var location = document.getElementById("city").innerHTML + ', Ethiopia';
         var query = "q=" + encodeURIComponent(location);
       
         var url = "https://maps.google.com/maps?" +

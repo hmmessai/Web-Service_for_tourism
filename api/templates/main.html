@@ -52,7 +52,7 @@
             </li>
             <div id="myDIV">
               {% for city in cities %}
-                <a href="/city/{{city.name}}" class="list-group-item">{{ city.name }}</a>
+                <a href="/city/{{city.id}}" class="list-group-item">{{ city.name }}</a>
               {% endfor %}
             </div>
           </ul>
@@ -182,7 +182,7 @@
           var region = $('#region').val();
           var weather = $('#weather').val();
           if ((region === 'all' || region === city.region) && (weather === 'all' || weather === city.weather) && (min <= parseInt(city.population)) && (max >= parseInt(city.population))) {
-              $('#filteredResults').append(`<a href="/city/${city.name }" class="list-group-item">${city.name}</a>`)
+              $('#filteredResults').append(`<a href="/city/${city.id}" class="list-group-item">${city.name}</a>`)
           }
         });
       });

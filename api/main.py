@@ -68,7 +68,7 @@ def addCity():
 def addPlace():
     if request.method == 'POST':
         name = request.form['name']
-        city = request.form['city']
+        cities_id = request.form['cities_id']
         type = request.form['type']
         price = request.form['price']
         address = request.form['address']
@@ -76,7 +76,7 @@ def addPlace():
 
         data = {
             'name': name,
-            'city': city,
+            'city_id': cities_id,
             'type': type,
             'price': price,
             'address': address,
@@ -93,11 +93,13 @@ def addPlace():
 def city(city):
     citys = models.storage.all('City')
     cities = []
-    places = City.places(city)
+
+    city = City.get(city)
+
+    places = city.places
     for v in citys.values():
         cities.append(v.to_dict())
 
-    city = City.search(city)
     sorted_cities = sorted(cities, key=lambda kv: kv['name'])
 
     return render_template('city.html', city=city, url=request.url, cities=sorted_cities, places=places)
@@ -120,4 +122,4 @@ def update_city():
             if image.filename != '':
                 image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], f"{city.id}.jpg")
                 image.save(image_path)
-        return redirect(url_for('main.city', city=city.name))
+        return redirect(url_for('main.city', city=city.id))

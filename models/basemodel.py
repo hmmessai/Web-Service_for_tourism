@@ -3,11 +3,20 @@
 from datetime import datetime
 import models
 import uuid
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
 class BaseModel:
     """BaseModel Representation"""
+
+    id = Column(String(60), primary_key=True, unique=True, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+
     def __init__(self, *args, **kwargs):
         """Initialization of BaseModel instance"""
         if kwargs:
@@ -46,6 +55,8 @@ class BaseModel:
         new_dict["__class__"] = self.__class__.__name__
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
+        if "places" in new_dict:
+            del new_dict["places"]
         return new_dict
 
     def delete(self):
@@ -57,8 +68,8 @@ class BaseModel:
     def get(cls, id):
         """Searches for a place by id"""
         search_for = cls.__name__ + '.' + str(id)
-        all_places = models.storage.all(cls)
-        for key, value in all_places.items():
+        allObjs = models.storage.all()
+        for key, value in allObjs.items():
             if key == search_for:
                 return value
         return None, "**Cannot find " + search_for + "***"
