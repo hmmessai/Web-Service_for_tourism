@@ -18,10 +18,17 @@
               </a>
       </div>
       <ul class="navbar-right">
-        {% if request.path == '/contribute' %}
-          <a class="btn btn-primary" href="{{ url_for('main.index') }}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a>
-        {% else%}
-          <a class="btn btn-primary" href="{{ url_for('main.contribute') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Contribute</a>
+        {% if session['username'] %}
+          {% if request.path == '/contribute' %}
+            <a class="btn btn-primary" href="{{ url_for('main.index') }}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a>
+            <a class="btn btn-primary" href="{{ url_for('auth.logout') }}">Log Out</a>
+          {% else %}
+            <a class="btn btn-primary" href="{{ url_for('main.contribute') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Contribute</a>
+            <a class="btn btn-primary" href="{{ url_for('auth.logout') }}">Log Out</a>
+          {% endif %}
+        {% else %}
+          <a class="btn btn-primary" href="{{ url_for('auth.login') }}">Log In</a>
+          <a class="btn btn-primary" href="{{ url_for('auth.signup') }}">Sign Up</a>
         {% endif %}
       </ul>
     </div>

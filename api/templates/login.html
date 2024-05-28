@@ -1,0 +1,50 @@
+{% extends 'main.html' %}
+{% block title %}
+    Login
+{% endblock %}
+{% block content %}
+    <style>
+        .custom-padding {
+            padding: 5px 10px 5px;
+        }
+        .centered-container {
+            height: 80vh; /* Full viewport height */
+            padding-top: calc(20vh);
+        }
+        .centered-content {
+            text-align: center; /* Optional: center text within the div */
+        }
+        .container-border {
+            border: 1px solid blue;
+            border-radius: 10px;
+        }
+    </style>
+
+    <div class="container-fluid centered-container">
+        <div class="row centered-content container-border custom-padding">
+            <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3 centered-content">
+                <form method="POST" action="/auth/login">
+                    <div class="col-md-10 col-sm-10 panel panel-default">
+                        <h1>LOG IN</h1>
+                    </div>
+                    {% if error%}
+                        <div class="col-md-10 col-sm-10 btn-danger alert">
+                            {{error}}
+                        </div>
+                    {% endif %}
+                    <div class="col-md-10 col-sm-10 custom-padding" st>
+                        <label for="name">Username</label>
+                        <input class="form-control" type="text" name="name" placeholder="Username" required>
+                    </div>
+                    <div class="col-md-10 col-sm-10 custom-padding">
+                        <label for="password">Password</label>
+                        <input class="form-control" type="password" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="col-md-10 col-sm-10 custom-padding">
+                        <button class="btn btn-default btn-primary" type="submit">Log in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

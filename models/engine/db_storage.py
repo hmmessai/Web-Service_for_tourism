@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.city import City
 from models.place import Place
+from models.user import User
 
 load_dotenv()
 
@@ -17,7 +18,8 @@ db_env = os.getenv('DB_ENV')
 
 classes = {
     'City': City,
-    'Place': Place
+    'Place': Place,
+    'User': User
 }
 
 class DBStorage:
@@ -51,6 +53,9 @@ class DBStorage:
 
     def save(self):
         self.__session.commit()
+
+    def rollback(self):
+        self.__session.rollback()
 
     def delete(self, obj=None):
         if obj is not None:

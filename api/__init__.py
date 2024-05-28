@@ -1,17 +1,32 @@
 import os
-import json
+from dotenv import load_dotenv
+from urllib.parse import quote
 
-from flask import Flask
+from flask import Flask, g
 from flask_bootstrap import Bootstrap
+from flask_bcrypt import Bcrypt
 from datetime import datetime
+from flask_migrate import Migrate
+
+load_dotenv()
+
+db_host = os.getenv('DB_HOST')
+db_user = os.getenv('DB_USER')
+db_pass = os.getenv('DB_PASSWORD').encode('utf-8')
+db_name = os.getenv('DB_DATABASE')
+db_env = os.getenv('DB_ENV')
+
+db_url =  'mysql+mysqldb://' + db_user + ':' + quote(db_pass) + '@' + db_host + '/' + db_name
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'api.sqlite'),
+        SQLALCHEMY_DATABASE_URI = db_url,
         UPLOAD_FOLDER=os.path.join(app.instance_path, 'uploads/'),
-        STORAGE_FOLDER=os.path.join(app.instance_path, 'storage/')
+        STORAGE_FOLDER=os.path.join(app.instance_path, 'storage/'),
+        SESSION_TYPE = 'filesystem'
     )
 
     upload_folder = app.config['UPLOAD_FOLDER']
@@ -44,13 +59,29 @@ def create_app(test_config=None):
     def hello():
         return "<h1>Hello World</h1>"
     
-    from . import db
-    db.init_app(app)
+    from models.user import User
+    from models.city import City
+    from models.place import Place
 
-    from . import api
-    app.register_blueprint(api.bp)
+    with app.app_context():
+        from . import db
+        db.get_db().init_app(app)
 
-    from . import main
-    app.register_blueprint(main.bp)
+        from . import api
+        app.register_blueprint(api.bp)
+
+        from . import main
+        app.register_blueprint(main.bp)
+
+        from . import auth
+        app.register_blueprint(auth.bp)
+        
+
+        migrate = Migrate(app, g.db)
+        g.bcrypt = Bcrypt(app)
+
+        db.get_db().create_all()
+
+
     
     return app

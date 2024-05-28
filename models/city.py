@@ -4,7 +4,7 @@ import models
 import os
 from dotenv import load_dotenv
 from models.basemodel import BaseModel, Base
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 load_dotenv()
@@ -15,11 +15,12 @@ class City(BaseModel, Base):
     """City Representation"""
 
     __tablename__ = 'cities'
-    name = Column(String(128), nullable=False)
+    name = Column(String(128), nullable=False, unique=True)
     population = Column(Integer, nullable=False)
     region = Column(String(90), nullable=False)
     weather = Column(String(90), nullable=False)
     features = Column(String(90), nullable=True)
+    created_by = Column(ForeignKey('users.id'), nullable=False)
 
 
     if DB_STORAGE == 'db':

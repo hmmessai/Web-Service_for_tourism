@@ -2,8 +2,9 @@ import os
 import models
 from models.city import City
 from models.place import Place
+from models.user import User
 from flask import (
-    Blueprint, request, render_template, redirect, url_for
+    Blueprint, request, render_template, redirect, url_for, session
 )
 from flask import (
     current_app, send_from_directory
@@ -18,10 +19,13 @@ bp = Blueprint('main', __name__)
 def index():
     citys = models.storage.all('City')
     cities = []
-    for v in citys.values():
-        cities.append(v.to_dict())
+    try:
+        for v in citys.values():
+            cities.append(v.to_dict())
 
-    sorted_cities = sorted(cities, key=lambda kv: kv['name'])
+        sorted_cities = sorted(cities, key=lambda kv: kv['name'])
+    except Exception:
+        sorted_cities = []
 
     return render_template('main.html', cities=sorted_cities)
 
@@ -47,7 +51,8 @@ def addCity():
             'name': name,
             'population': population,
             'region': region,
-            'weather': weather
+            'weather': weather,
+            'created_by': session['user_id']
         }
 
         city = City(**data)
@@ -109,10 +114,11 @@ def uploaded_file(filename):
     return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
-@bp.route('/update-city', methods=['GET', 'POST'])
-def update_city():
+@bp.route('/update-city/<id>', methods=['GET', 'POST'])
+def update_city(id):
     if request.method == 'POST':
-        city = City.search(request.form['name'])
+        city = City.get(id)
+        print(city)
         for k, v in request.form.items():
             setattr(city, k, v)
         city.save()
