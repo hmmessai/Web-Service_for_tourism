@@ -40,10 +40,10 @@
     <div class="row" style="margin-bottom: 20px;">
       <div class="col-md-4"></div>
       <div class="col-md-4 form-group">
-        <input type="text" class="form-control" id="myInput">
+        <input type="text" class="form-control" id="searchInput">
       </div>
       <div class="col-md-4 form-group text-left d-flex align-self-start justify-content-start">
-        <button class="btn btn-default btn-primary" style="padding: 5px 30px 5px;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>   Search</button>
+        <button class="btn btn-default btn-primary" style="padding: 5px 30px 5px;" id="search-cities"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>   Search</button>
       </div>
     </div>
   </div>
@@ -193,6 +193,25 @@
           }
         });
       });
+
+    
+    $('#search-cities').click( function () {
+      let keyword = $('#searchInput').val();
+      keyword = `${keyword}%`;
+      $.ajax({
+          url: 'api/search-cities',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ keyword: keyword }),
+          success: function(results) {
+            $('#filteredResults').empty();
+            results.forEach(result => {
+              $('#filteredResults').append(`<a href="/city/${result.id}" class="list-group-item">${result.name}</a>`);
+            });
+          }
+      });
+    }
+    );
   });
 </script>
 

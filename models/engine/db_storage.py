@@ -47,6 +47,12 @@ class DBStorage:
                     key = obj.__class__.__name__ + '.' + obj.id
                     dic[key] = obj
         return dic
+    
+    def search(self, cls, keyword):
+        for i in classes:
+            if cls in classes:
+                objs = self.__session.query(classes[cls]).filter(classes[cls].name.ilike(keyword)).all()
+        return objs
 
     def new(self, obj):
         self.__session.add(obj)

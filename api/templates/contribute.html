@@ -141,7 +141,8 @@
     </div>
     <script>
       function changeMap () {
-        var location = document.getElementById("city").innerHTML + ', Ethiopia';
+        var selectElement = document.getElementById("city");
+        var location = selectElement.selectedOptions[0].innerHTML;
         var query = "q=" + encodeURIComponent(location);
       
         var url = "https://maps.google.com/maps?" +
@@ -166,10 +167,23 @@
       document.getElementById('gmap_canvas').addEventListener('click', saveLocation)
       
       const urlParams = new URLSearchParams(window.location.search);
-      const cityName = urlParams.get('city') || 'Adama';
+      const cityName = urlParams.get('city');
 
-      
-      document.getElementById('city').value = cityName;
+
+      const selectElement = document.getElementById('city');
+      const options = selectElement.options;
+
+      let city_found = false;
+      for (let i = 0; i < options.length; i++) {
+        if (cityName == options[i].innerHTML) {
+          selectElement.selectedIndex = i;
+          city_found = true;
+          break;
+        } 
+      }
+      if (!city_found) {
+        selectElement.selectedIndex = 0;
+      }
       changeMap();
     </script>
 {% endblock %}

@@ -48,3 +48,16 @@ def create_place():
     place = Place(name=name)
     place.save()
     return place.to_dict()
+
+@bp.route('/search-cities', methods=['GET', 'POST'])
+def search_cities():
+    key = request.json
+    keyword = key.get('keyword')
+    cities_list = []
+
+    results = models.storage.search("City", keyword)
+
+    for i in results:
+        cities_list.append(i.to_dict())
+
+    return cities_list

@@ -27,7 +27,9 @@
                         Registered Places
                       </h3>
                       <span class="col-md-2 col-sm-2" style=""></span>
-                      <a class="col-md-4 col-sm-4 btn btn-default btn-warning" href="{{ url_for('main.contribute') }}?city={{city.name}}#add-place" style="align-self: center; margin-top: 20px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Place</a>
+                      {% if session['username'] %}
+                        <a class="col-md-4 col-sm-4 btn btn-default btn-warning" href="{{ url_for('main.contribute') }}?city={{city.name}}#add-place" style="align-self: center; margin-top: 20px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Place</a>
+                      {% endif %}
                     </div>
                   </li>
                   <div id="myDIV">
