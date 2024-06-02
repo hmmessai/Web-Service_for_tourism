@@ -5,6 +5,8 @@ from models.city import City
 from flask import (
     Blueprint, request, render_template, url_for, redirect, make_response, session
 )
+import MySQLdb
+from MySQLdb import IntegrityError
 import sqlalchemy
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -37,6 +39,7 @@ def login():
     
 @bp.route('/signup', methods=['GET', 'POST'])
 def signup():
+    cities = models.storage.all(City)
     if request.method == 'POST':
             try:
                 address = request.form['address']
@@ -48,19 +51,21 @@ def signup():
                 user = User(address=address, city_id=city_id, name=name, phone_number=phone_number, password=hashed_password)
                 models.storage.new(user)
                 models.storage.save()
+            except IntegrityError:
+                models.storage.rollback()
+                error = "Username already taken try another one"
+                return render_template('signup.html', error=error, cities=cities)
             except Exception as e:
                 models.storage.rollback()
                 error = str(e)
-                return render_template('signup.html', error=error)
+                return render_template('signup.html', error=error, cities=cities)
             response = make_response(redirect(url_for('main.index')))
-            # response.set_cookie('user_id', user.id)
             session['user_id'] = user.id
             if checkauth():
                 return response
             return render_template('signup.html', cities=cities)
             
     else:
-        cities = models.storage.all(City)
         return render_template('signup.html', cities=cities)
     
 @bp.route('/logout')
