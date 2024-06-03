@@ -24,11 +24,11 @@ class User(BaseModel, Base):
 
     @classmethod
     def search(cls, name):
-        """Searches city by name"""
-        cities = models.storage.all('User')
-        print(cities)
-        for city in cities.values():
-            if city.name == name:
-                return city
+        """Searches user by name"""
+        users = models.storage.all('User')
+        print(users)
+        for user in users.values():
+            if user.name == name:
+                return user
 
         return None

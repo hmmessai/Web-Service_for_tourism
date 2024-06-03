@@ -1,15 +1,18 @@
 #!/usr/bin/python3
 """File Storage Definition"""
 import json
+import re
 from operator import itemgetter
 from models.basemodel import BaseModel
 from models.city import City
 from models.place import Place
+from models.user import User
 
 classes = {
     'BaseModel': BaseModel,
     'City': City,
     'Place': Place,
+    'User': User
     }
 
 class FileStorage:
@@ -41,6 +44,43 @@ class FileStorage:
         if obj is not None:
             key = obj.__class__.__name__ + '.' + str(obj.id)
             self.__objects[key] = obj
+
+    def rollback(self):
+        """Rollback the file storage"""
+        with open(self.__file, 'r+') as f:
+            f.seek(0, 2)
+            f.write("\"\" }}")
+        with open(self.__file, 'r+') as f:
+            obj = json.load(f)
+            f.seek(0)
+            f.truncate()
+            dic = {}
+            print(obj)
+            for index,(key, value) in enumerate(obj.items()):
+                if index < len(obj):
+                    dic[key] = value
+            print(dic)
+            json.dump(dic, f)
+
+    def search(self, cls, keyword):
+        """Searchs for a keyword for a specific class"""
+        results = []
+        if cls is not None:
+            names = []
+            vals = self.all(cls)
+            for value in vals.values():
+                names.append(value.name)
+            keyword = f'^{re.escape(keyword.lower()[:-1])}.*'
+            for name in names:
+                if re.search(keyword, name.lower(), re.IGNORECASE):
+                    for value in vals.values():
+                        if value.name == name:
+                            results.append(value)
+            return results
+        return results
+
+
+                
 
     def save(self):
         """Saves all created instances"""

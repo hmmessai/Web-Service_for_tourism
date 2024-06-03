@@ -20,7 +20,8 @@ def login():
         if user_name and password:
             try:
                 user = User.search(user_name)
-                if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+                pwd = user.password
+                if user and bcrypt.checkpw(password.encode('utf-8'), pwd.encode('utf-8')):
                     response = make_response(redirect(url_for('main.index')))
                     # response.set_cookie('user_id', user.id)
                     session['user_id'] = user.id
@@ -48,7 +49,7 @@ def signup():
                 phone_number = request.form['phone_number']
                 password = request.form['password']
                 hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-                user = User(address=address, city_id=city_id, name=name, phone_number=phone_number, password=hashed_password)
+                user = User(address=address, city_id=city_id, name=name, phone_number=phone_number, password=hashed_password.decode('utf-8'))
                 models.storage.new(user)
                 models.storage.save()
             except IntegrityError:
