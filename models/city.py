@@ -51,8 +51,8 @@ class City(BaseModel, Base):
             all_places = models.storage.all(models.place.Place)
             list_of_places = []
             for place in all_places.values():
-                if place.city and place.city == self.name:
+                if place.city and place.city.name == self.name:
                     list_of_places.append(place)
-            
+                
             return list_of_places
 

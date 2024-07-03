@@ -31,3 +31,11 @@ class Place(BaseModel, Base):
                 return city
 
         return None, "**Cannot find city with name: " + name + "***"
+
+    @property
+    def city(self):
+        """Returns the city of the place resides"""
+        cities = models.storage.all(City)
+        for city in cities.values():
+            if city.id == self.city_id:
+                return city
