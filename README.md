@@ -44,9 +44,18 @@ Go to this URL and enjoy browsing through the website. Please make sure that the
 
 When you use database storage make sure you have set the correct information of the database in your .env file following the format from the .env.example file or set the above environment variables correctly. And also create the database you specified in the .env file as DB_DATABASE
 
+## Features
+
+- User Authentication
+- Contributing or adding cities and tourist sites for authenticated users
+- Editing of cities for the user who created them
+- Viewing of all the cities and sites already added to the database when not logged in
+- Filtering the cities based on population, weather and region
+- Search for a specific city
+
 ## Improvment that are being worked on
 
-- Authentication system to filter who can add information to the database
+- Tourist Sites page
 - Better CSS to make it look more appealing
 
 ## Authors
