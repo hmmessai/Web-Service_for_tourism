@@ -28,8 +28,9 @@ Executing this app will be done with the following code.
 
 ## Viewing
 
-After running the server with `flask --app api run` you should be able to access the website on http://localhost:5000
-Go to this URL and enjoy browsing through the website.
+After running the server with `flask --app api run` you should be able to access the website on http://localhost:5000.
+
+Go to this URL and enjoy browsing through the website. Please make sure that the port 5000 is available and not taken by another process.
 
 ## Environmental variables
 
