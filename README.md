@@ -26,6 +26,11 @@ Executing this app will be done with the following code.
 
   `flask --app api run`
 
+## Viewing
+
+After running the server with `flask --app api run` you should be able to access the website on http://localhost:5000
+Go to this URL and enjoy browsing through the website.
+
 ## Environmental variables
 
 | VARIABLE    | VALUES                                           | Meaning                                                     |
